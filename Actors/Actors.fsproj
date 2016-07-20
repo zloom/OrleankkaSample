@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{35eafd56-7649-4df4-afcd-1232de4ea71b}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Actors</RootNamespace>
+    <AssemblyName>Actors</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
+    <Name>Actors</Name>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Debug\Actors.XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Release\Actors.XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '11.0'">
+      <PropertyGroup Condition="Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')">
+        <FSharpTargetsPath>$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets</FSharpTargetsPath>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets')">
+        <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <Import Project="$(FSharpTargetsPath)" />
+  <Import Project="..\packages\OctoPack.3.0.53\tools\OctoPack.targets" Condition="Exists('..\packages\OctoPack.3.0.53\tools\OctoPack.targets')" />
+  <Target Name="EnsureOctoPackImported" BeforeTargets="BeforeBuild" Condition="'$(OctoPackImported)' == ''">
+    <Error Condition="!Exists('..\packages\OctoPack.3.0.53\tools\OctoPack.targets') And ('$(RunOctoPack)' != '' And $(RunOctoPack))" Text="You are trying to build with OctoPack, but the NuGet targets file that OctoPack depends on is not available on this computer. This is probably because the OctoPack package has not been committed to source control, or NuGet Package Restore is not enabled. Please enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\OctoPack.3.0.53\tools\OctoPack.targets') And ('$(RunOctoPack)' != '' And $(RunOctoPack))" Text="OctoPack cannot be run because NuGet packages were restored prior to the build running, and the targets file was unavailable when the build started. Please build the project again to include these packages in the build. You may also need to make sure that your build server does not delete packages prior to each build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Content Include="packages.config" />
+    <Compile Include="MessageAccumulator.fs" />
+    <Compile Include="CompositionRoot.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.fsproj">
+      <Name>Infrastructure</Name>
+      <Project>{b6e35c5c-9dad-4ec8-8663-45f155fadb38}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orleankka">
+      <HintPath>..\packages\Orleankka.0.23.0\lib\net451\Orleankka.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orleankka.Core">
+      <HintPath>..\packages\Orleankka.0.23.0\lib\net451\Orleankka.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orleankka.Meta">
+      <HintPath>..\packages\Orleankka.0.23.0\lib\net451\Orleankka.Meta.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Orleans">
+      <HintPath>..\packages\Microsoft.Orleans.Core.1.2.3\lib\net451\Orleans.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansCodeGenerator">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansCodeGenerator.1.2.3\lib\net451\OrleansCodeGenerator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansDependencyInjection">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.2.3\lib\net451\OrleansDependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansManager">
+      <HintPath>..\packages\Orleankka.0.23.0\lib\net451\OrleansManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansProviders">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansProviders.1.2.3\lib\net451\OrleansProviders.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansRuntime">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.2.3\lib\net451\OrleansRuntime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
