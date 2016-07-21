@@ -59,7 +59,7 @@ module Program =
                 .From(clientConfig)
                 .Serializer<BinarySerializer>()
                 .Register<AzureQueueStreamProvider>(ProviderName, streamSettings)
-                .Register(typeof<IBillingActorsMark>.Assembly)
+                .Register(typeof<IActorsAssemblyMark>.Assembly)
                 .Done()        
 
         let send id = 

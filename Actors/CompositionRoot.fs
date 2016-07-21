@@ -4,7 +4,7 @@ open Ninject.Modules
 
 open Infrastructure
 
-type IBillingActorsMark = interface end
+type IActorsAssemblyMark = interface end
 
 module CompositionRoot =      
     

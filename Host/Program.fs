@@ -29,7 +29,7 @@ module Program =
                 .Cluster()                                 
                 .From(clusterConfig)
                 .Serializer<BinarySerializer>()
-                .Register(typeof<IBillingActorsMark>.Assembly)
+                .Register(typeof<IActorsAssemblyMark>.Assembly)
                 .Register<AzureQueueStreamProvider>(ProviderName, streamSettings)
                 .Activator<HostActivator>()                                
                 .Done()
