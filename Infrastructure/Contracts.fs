@@ -26,5 +26,8 @@ module Contracts =
         {Message: string}
         interface Event
 
-    type GetMessages = 
+    type GetMessages() = 
+        class interface Query end
+
+    type GetPlacement() = 
         class interface Query end

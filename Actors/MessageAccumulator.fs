@@ -22,4 +22,7 @@ type MessageAccumulator(id, runtime, env) =
         
     member __.Answer(query: GetMessages) =
         messages   
+
+    member __.Answer(query: GetPlacement) =
+        Environment.MachineName  
         
