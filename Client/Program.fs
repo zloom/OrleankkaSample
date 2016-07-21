@@ -60,32 +60,63 @@ module Program =
                 .Serializer<BinarySerializer>()
                 .Register<AzureQueueStreamProvider>(ProviderName, streamSettings)
                 .Register(typeof<IBillingActorsMark>.Assembly)
-                .Done()
+                .Done()        
 
-        let sendMessages() =
-            actorIds
-            |> Seq.iter (fun id -> pushToStream client id {AppendMessage.Message = sprintf "Message - %i" (random.Next 1000)})
-                        
+        let send id = 
+            pushToStream client id {AppendMessage.Message = sprintf "Message - %i" (random.Next 1000)}
+
+        let ask id = async {                
+            let! placement = ask<string> client id (GetPlacement() :> Query)
+            let! messages = ask<string list> client id (GetMessages() :> Query)
+            return (id, placement, messages)
+        }
+
+        let print (id, p, m) = 
+            printf "\r\nid %s - %s - total messages %i" id p (Seq.length m);
+            Seq.iter (printf "\r\n%s") m
+
+        let sendAsk id = async {
+            try
+                do! Async.Sleep 2000 
+                let! id, p, m = ask id
+                print(id, p, m)
+                printf "\r\nPing done stamp: %i." DateTime.Now.Millisecond
+            with error ->                 
+                printf "\r\nPing failed stamp: %i." DateTime.Now.Millisecond
+        }
+        
+        let wait = Async.Sleep >> Async.RunSynchronously                    
+
+        let sendMessages() =            
+            Seq.iter send actorIds                                  
 
         let showPlacementAndMessages() = 
-            let ask id = async {                
-                let! placement = ask<string> client id (GetPlacement() :> Query)
-                let! messages = ask<string list> client id (GetMessages() :> Query)
-                return (id, placement, messages)
-            }
-
             actorIds
             |> Seq.map ask
             |> Async.Parallel
             |> Async.RunSynchronously
-            |> Seq.iter (fun (id, p, m) -> printf "\r\nid %s - %s - total messages %i" id p m.Length; Seq.iter (printf "\r\n%s") m)
+            |> Seq.iter print
+
+        let pingActor() =
+            actorIds
+            |> Seq.head
+            |> Seq.replicate 1000 
+            |> Seq.map sendAsk
+            |> Seq.iter Async.RunSynchronously
         
         
         describe "Start client" start  
         
-        describe "Send random message to each actor" sendMessages          
+        describe "Send random message to each actor" sendMessages     
+        
+        wait 3000           
 
         describe "Show placements and messages" showPlacementAndMessages
+
+        wait 1000      
+
+        describe "Ping first actor 1000 times" pingActor
+
         
         printf "\r\nPress any key to terminate client..."
         Console.ReadKey() 

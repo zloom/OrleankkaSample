@@ -35,6 +35,7 @@ module Program =
                 .Done()
                 
         
+        Console.ForegroundColor <- ConsoleColor.Green
         Console.WriteLine "Press any key to terminate host..."
         Console.ReadKey() |> ignore
 
