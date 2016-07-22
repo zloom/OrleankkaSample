@@ -31,7 +31,7 @@ module Program =
                 .Serializer<BinarySerializer>()
                 .Register(typeof<IActorsAssemblyMark>.Assembly)
                 .Register<AzureQueueStreamProvider>(ProviderName, streamSettings)
-                .Activator<HostActivator>()                                
+                .Activator<NinjectActivator>()                                
                 .Done()
                 
         

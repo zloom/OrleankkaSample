@@ -14,7 +14,7 @@ open Orleankka
 [<AutoOpen>]
 module Activator =    
 
-    type HostActivator() =
+    type NinjectActivator() =
         inherit ActorActivator()
 
         let container = new StandardKernel(new InfrastructureModule(), new ActorsModule())
